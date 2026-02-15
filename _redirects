@@ -1,4 +1,0 @@
-# Redireciona todas as rotas para index.html (SPA)
-# Usado pelo Netlify e Cloudflare Pages
-
-/*    /index.html   200
