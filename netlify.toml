@@ -1,0 +1,80 @@
+# Configuração do Netlify para Sistema de Gestão Escolar
+
+[build]
+  # Diretório base (raiz do projeto)
+  base = "/"
+  
+  # Comando para instalar dependências e fazer build
+  command = "npm install && npm run build"
+  
+  # Pasta de saída do build
+  publish = "dist"
+
+# Configurações do ambiente de build
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_VERSION = "9"
+
+# Redireciona todas as rotas para index.html (SPA)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers de segurança
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Cache para assets estáticos
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache para imagens
+[[headers]]
+  for = "*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.ico"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Configurações de desenvolvimento
+[dev]
+  command = "npm run dev"
+  port = 5173
+  targetPort = 5173
+  autoLaunch = true
+
+# Configurações de contexto (diferentes ambientes)
+[context.production]
+  command = "npm run build"
+
+[context.deploy-preview]
+  command = "npm run build"
+
+[context.branch-deploy]
+  command = "npm run build"
+
+# Plugins (opcional)
+# [[plugins]]
+#   package = "@netlify/plugin-lighthouse"
